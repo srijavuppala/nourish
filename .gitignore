@@ -1,0 +1,11 @@
+.dart_tool/
+.packages
+build/
+dist/
+node_modules/
+.sites-runtime/
+.flutter-plugins-dependencies
+
+.env
+.env.local
+.vercel/
