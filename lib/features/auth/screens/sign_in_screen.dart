@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/demo_mode.dart';
+import '../../demo/demo_seed.dart';
 import '../data/auth_repository.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
@@ -14,12 +16,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   bool _busy = false;
   String? _error;
 
-  Future<void> _signIn() async {
+  Future<void> _signIn({bool withSampleData = false}) async {
     setState(() {
       _busy = true;
       _error = null;
     });
     try {
+      // Seed before signing in, so the first frame after the redirect already
+      // has the sample plan and history.
+      if (withSampleData) await seedDemoData();
       await ref.read(authRepositoryProvider).signIn();
       // On success the router redirects; no navigation needed here.
     } catch (_) {
@@ -86,6 +91,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     : const Icon(Icons.login_rounded),
                 label: Text(_busy ? 'Signing in…' : 'Continue with Google'),
               ),
+              // Demo builds offer a second path: skip onboarding and land on
+              // a dashboard that already has a fortnight of history.
+              if (kDemoMode) ...[
+                const SizedBox(height: 12),
+                OutlinedButton(
+                  onPressed: _busy ? null : () => _signIn(withSampleData: true),
+                  child: const Text('Explore with sample data'),
+                ),
+              ],
               const SizedBox(height: 16),
               Text(
                 'Your meals stay private. Delete everything whenever you want.',

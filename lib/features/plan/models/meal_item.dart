@@ -56,13 +56,28 @@ class MealItem {
         fatG: fatG ?? this.fatG,
       );
 
-  /// `6 large Egg` — what the confirm card and plan row show.
+  /// Units that are a measure rather than a description, so they read better
+  /// attached to the number: `60g Oats`, not `60 g Oats`.
+  static const _attachedUnits = {'g', 'kg', 'ml', 'l', 'oz', 'lb'};
+
+  /// Units that add nothing once the food is named. `3 Roti` says everything
+  /// `3 piece Roti` does.
+  static const _silentUnits = {'piece', 'pieces', 'item', 'items', 'unit'};
+
+  /// `6 large Egg`, `60g Oats`, `3 Roti` — what the cards and plan rows show.
   String get display {
     final quantity = qty == qty.roundToDouble()
         ? qty.round().toString()
         : qty.toStringAsFixed(1);
-    final unitPart = unit.trim().isEmpty ? '' : '$unit ';
-    return '$quantity $unitPart$name';
+
+    final cleanUnit = unit.trim().toLowerCase();
+    if (cleanUnit.isEmpty || _silentUnits.contains(cleanUnit)) {
+      return '$quantity $name';
+    }
+    if (_attachedUnits.contains(cleanUnit)) {
+      return '$quantity$cleanUnit $name';
+    }
+    return '$quantity ${unit.trim()} $name';
   }
 
   Map<String, dynamic> toMap() => {

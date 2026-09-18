@@ -52,6 +52,47 @@ void main() {
     });
   });
 
+  group('MealItem.display', () {
+    MealItem withUnit(String unit) => MealItem(
+          name: 'Oats',
+          qty: 60,
+          unit: unit,
+          kcal: 233,
+          proteinG: 10,
+        );
+
+    test('attaches mass and volume units to the number', () {
+      expect(withUnit('g').display, '60g Oats');
+      expect(withUnit('ml').display, '60ml Oats');
+      expect(withUnit('G').display, '60g Oats');
+    });
+
+    test('keeps descriptive units as separate words', () {
+      expect(_egg.display, '6 large Egg');
+      expect(
+        const MealItem(name: 'Dal', qty: 1, unit: 'cup', kcal: 230, proteinG: 18)
+            .display,
+        '1 cup Dal',
+      );
+    });
+
+    test('drops units that add nothing to the name', () {
+      expect(
+        const MealItem(name: 'Roti', qty: 3, unit: 'piece', kcal: 360, proteinG: 9)
+            .display,
+        '3 Roti',
+      );
+    });
+
+    test('handles a missing unit', () {
+      expect(
+        const MealItem(name: 'Apple', qty: 2, unit: '', kcal: 190, proteinG: 1)
+            .display,
+        '2 Apple',
+      );
+    });
+  });
+
   group('DayLog totals', () {
     test('sums the meals that were eaten', () {
       final log = _log('2026-09-17');

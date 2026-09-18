@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/demo_mode.dart';
 import '../../auth/data/auth_repository.dart';
+import '../../demo/demo_seed.dart';
 import '../../notifications/notification_service.dart';
 import '../../onboarding/data/onboarding_repository.dart';
 import '../../onboarding/models/targets.dart';
@@ -176,6 +178,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             title: const Text('Sign out'),
             onTap: () => ref.read(authRepositoryProvider).signOut(),
           ),
+          // Demo builds only: put the sample data back the way it started,
+          // so the next run-through begins from the same place.
+          if (kDemoMode)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.restart_alt),
+              title: const Text('Reset demo'),
+              subtitle: const Text('Restores the sample plan and history.'),
+              onTap: _resetDemo,
+            ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.delete_forever,
@@ -263,6 +275,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             updatedAt: DateTime.now(),
           ),
         );
+  }
+
+  Future<void> _resetDemo() async {
+    await ref.read(authRepositoryProvider).deleteAccount();
+    await seedDemoData();
+    await ref.read(authRepositoryProvider).signIn();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Demo reset.')),
+      );
+    }
   }
 
   Future<void> _confirmDelete() async {

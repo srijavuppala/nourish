@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A tiny JSON document store backed by shared_preferences, which on the web
@@ -16,6 +17,10 @@ class DemoStore {
   static Future<DemoStore> instance() async {
     return _instance ??= DemoStore._(await SharedPreferences.getInstance());
   }
+
+  /// Drops the cached instance so a test can start from fresh mock values.
+  @visibleForTesting
+  static void resetCache() => _instance = null;
 
   Map<String, dynamic>? readDoc(String key) {
     final raw = _prefs.getString('$_prefix$key');
