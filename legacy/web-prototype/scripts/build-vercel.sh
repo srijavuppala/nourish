@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+cd "$(dirname "$0")/.."
 export CI=true
 export FLUTTER_SUPPRESS_ANALYTICS=true
 export TAR_OPTIONS=--no-same-owner

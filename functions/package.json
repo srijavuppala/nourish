@@ -1,0 +1,20 @@
+{
+  "name": "nourish-functions",
+  "description": "Cloud Functions for Nourish — meal parsing via Gemini, enriched with USDA data.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.1.0"
+  }
+}

@@ -1,11 +1,33 @@
+# Flutter / Dart
 .dart_tool/
 .packages
 build/
-dist/
-node_modules/
-.sites-runtime/
+.flutter-plugins
 .flutter-plugins-dependencies
+*.iml
 
+# Android signing — never commit these
+android/key.properties
+*.jks
+*.keystore
+
+# Firebase config generated per-developer by flutterfire configure
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+.firebase/
+
+# Cloud Functions
+functions/node_modules/
+functions/.env
+functions/lib/
+
+# Legacy web prototype
+legacy/web-prototype/dist/
+legacy/web-prototype/.sites-runtime/
+node_modules/
+
+# Secrets
 .env
 .env.local
 .vercel/

@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "echo Flutter dependencies are installed by the build script",
-  "buildCommand": "bash scripts/build-vercel.sh",
-  "outputDirectory": "build/web",
+  "buildCommand": "bash legacy/web-prototype/scripts/build-vercel.sh",
+  "outputDirectory": "legacy/web-prototype/build/web",
   "headers": [
     {"source": "/(.*)", "headers": [
       {"key": "X-Content-Type-Options", "value": "nosniff"},
