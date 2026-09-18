@@ -6,24 +6,50 @@ Most food trackers ask people to weigh and log every ingredient, so most quit
 within a week. But most people eat roughly the same things most days. Nourish
 learns your usual meals once, then daily logging becomes a few swipes.
 
-Flutter (Android and iOS) with a Firebase backend. Phase 1 targets a signed
-APK a tester can install.
+Flutter (web, Android and iOS) with a Firebase backend. There is a demo mode
+that runs in a browser with no cloud account, for showing the app before any
+of it is set up.
+
+## Run it right now, for free
+
+No Firebase project, no API keys, no Android phone. Demo mode stores
+everything in the browser and parses meals on-device:
+
+```bash
+flutter pub get
+flutter run -d chrome --dart-define=DEMO_MODE=true
+```
+
+That is the build to screen-share. Sign-in is a button that just works, and
+the meal parser understands the phrasings people actually type — "six eggs and
+two bananas", "2 rotis with dal", "150g chicken breast". **Delete my account**
+in Profile clears the demo data.
+
+To hand someone a link instead, build it and upload the folder anywhere
+static (Firebase Hosting, Vercel, GitHub Pages — all free tiers):
+
+```bash
+flutter build web --release --dart-define=DEMO_MODE=true
+# serve build/web/
+```
+
+Demo mode is a compile-time flag. Leave it off and the same code talks to
+Firebase.
 
 ## Status
 
 | Area | State |
 | --- | --- |
-| Domain models, targets calculator, streaks | Written, unit tested |
-| `parseMeal` Cloud Function | Written, 45 tests passing |
+| Analyzer | Clean — `No issues found!` |
+| Dart unit tests | 39 passing |
+| Cloud Function tests | 45 passing |
+| Demo mode on web | Verified in Chromium: sign-in, quiz, chat parsing, saving meals |
 | Firestore security rules | Written, not yet run against the emulator |
-| App screens (sign-in, quiz, chat, Today, Plan, check-in, History, Profile) | Written, not yet compiled |
 | Firebase project wiring | Not done — needs `flutterfire configure` |
+| Check-in deck on a real device | Not yet exercised end to end |
 | Android signing and APK | Not done |
 
-Nothing Dart here has been compiled yet: it was written without a Flutter SDK
-available. Expect to fix analyzer errors on the first `flutter run`.
-
-## Getting it running
+## Getting it running against Firebase
 
 ```bash
 # 1. Toolchain
@@ -134,9 +160,18 @@ intact so the Vercel deploy keeps working — `vercel.json` still points at it.
 It is a separate app: single-blob storage keyed by a browser cookie, no user
 accounts. None of it carries into the mobile app, but it is there for demos.
 
+## Known gaps
+
+- Typing a second meal before confirming the first silently replaces the
+  pending card. Fine when you are correcting yourself, confusing otherwise.
+- The check-in swipe deck has not been driven end to end yet; the flow above
+  stops after meals are saved to the plan.
+- Notifications are a no-op on web. They are a phone feature, and the web
+  build exists to be demoed.
+
 ## Next
 
-- Run `flutter analyze` and fix what the first compile turns up
+- Drive the check-in deck and History calendar in the browser
 - Test the Firestore rules in the emulator
-- Android signing config and a first APK to Firebase App Distribution
 - Widget tests for the check-in deck
+- Android signing config and a first APK, once there is an Android tester
