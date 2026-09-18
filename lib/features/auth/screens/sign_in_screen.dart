@@ -88,8 +88,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'We store what you tell us about your meals so we can build '
-                'your check-in. You can delete all of it at any time.',
+                'Your meals stay private. Delete everything whenever you want.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,

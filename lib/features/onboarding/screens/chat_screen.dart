@@ -36,6 +36,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     MealSlot.snack,
   ];
 
+  /// Varies by meal, so four saves in a row do not read like a loop.
+  static const _acknowledgements = {
+    MealSlot.breakfast: 'Got it.',
+    MealSlot.lunch: 'Got that too.',
+    MealSlot.dinner: 'Nice.',
+    MealSlot.snack: 'Last one, done.',
+  };
+
   static const _prompts = {
     MealSlot.breakfast: 'Tell me about your usual breakfast.',
     MealSlot.lunch: 'And lunch — what do you normally have?',
@@ -61,8 +69,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _messages.add(
       const _Message(
         _Speaker.nourish,
-        'Now the part that saves you time later. Describe each meal the way '
-        "you'd say it out loud — \"six eggs and two bananas\" is perfect.",
+        'Say it how you would out loud. "Six eggs and two bananas" works.',
       ),
     );
     _messages.add(_Message(_Speaker.nourish, _prompts[_slot]!));
@@ -112,10 +119,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             _messages.add(_Message(_Speaker.nourish, result.question));
           } else {
             _messages.add(
-              const _Message(
-                _Speaker.nourish,
-                'Here is what I got. Fix anything that looks off.',
-              ),
+              _Message(_Speaker.nourish, _acknowledgements[_slot]!),
             );
           }
         }
