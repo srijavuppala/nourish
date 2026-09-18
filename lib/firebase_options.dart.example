@@ -1,0 +1,18 @@
+// This file is a placeholder showing what `flutterfire configure` generates.
+//
+// Run `flutterfire configure` in the project root and it will write the real
+// lib/firebase_options.dart for your Firebase project. That file is
+// gitignored, along with android/app/google-services.json, per the PRD.
+//
+//   dart pub global activate flutterfire_cli
+//   flutterfire configure
+//
+// Do not fill this in by hand.
+
+import 'package:firebase_core/firebase_core.dart';
+
+class DefaultFirebaseOptions {
+  static FirebaseOptions get currentPlatform => throw UnimplementedError(
+        'Run `flutterfire configure` to generate lib/firebase_options.dart',
+      );
+}

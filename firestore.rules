@@ -1,0 +1,27 @@
+rules_version = '2';
+
+// Every document a user owns lives under users/{uid}, so ownership is the only
+// check needed. Nothing here is readable by another signed-in user.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      // Covers profile, targets, planMeals, chatLog, days and settings.
+      match /{document=**} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // Anything not matched above is denied, including any future collection
+    // added outside a user document.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
