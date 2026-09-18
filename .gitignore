@@ -11,8 +11,9 @@ android/key.properties
 *.jks
 *.keystore
 
-# Firebase config generated per-developer by flutterfire configure
-lib/firebase_options.dart
+# Per-project Firebase config. A placeholder lib/firebase_options.dart IS
+# committed so demo builds compile; `flutterfire configure` overwrites it.
+# These two carry project secrets and stay out of the repo, per the PRD.
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 .firebase/

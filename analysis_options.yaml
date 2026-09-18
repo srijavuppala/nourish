@@ -1,5 +1,12 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    # The earlier web prototype keeps its own (much denser) style.
+    - legacy/**
+    - build/**
+    - web/**
+
 linter:
   rules:
     - prefer_single_quotes

@@ -97,25 +97,25 @@ final routerProvider = Provider<GoRouter>((ref) {
               path: Routes.today,
               builder: (context, state) => const TodayScreen(),
             ),
-          ]),
+          ],),
           StatefulShellBranch(routes: [
             GoRoute(
               path: Routes.plan,
               builder: (context, state) => const PlanScreen(),
             ),
-          ]),
+          ],),
           StatefulShellBranch(routes: [
             GoRoute(
               path: Routes.history,
               builder: (context, state) => const HistoryScreen(),
             ),
-          ]),
+          ],),
           StatefulShellBranch(routes: [
             GoRoute(
               path: Routes.profile,
               builder: (context, state) => const ProfileScreen(),
             ),
-          ]),
+          ],),
         ],
       ),
     ],

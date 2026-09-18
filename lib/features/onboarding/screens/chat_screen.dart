@@ -61,7 +61,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _messages.add(
       const _Message(
         _Speaker.nourish,
-        "Now the part that saves you time later. Describe each meal the way "
+        'Now the part that saves you time later. Describe each meal the way '
         "you'd say it out loud — \"six eggs and two bananas\" is perfect.",
       ),
     );
@@ -158,7 +158,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 _Speaker.nourish,
                 "That didn't save. Check your connection and try again.",
               ),
-            ));
+            ),);
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -209,7 +209,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final pending = _pending;
 
     return Scaffold(

@@ -95,8 +95,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
                 backgroundImage:
-                    user.photoURL == null ? null : NetworkImage(user.photoURL!),
-                child: user.photoURL == null ? const Icon(Icons.person) : null,
+                    user.photoUrl == null ? null : NetworkImage(user.photoUrl!),
+                child: user.photoUrl == null ? const Icon(Icons.person) : null,
               ),
               title: Text(user.displayName ?? 'Signed in'),
               subtitle: Text(user.email ?? ''),
@@ -179,7 +179,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.delete_forever,
-                color: Theme.of(context).colorScheme.error),
+                color: Theme.of(context).colorScheme.error,),
             title: Text(
               'Delete my account',
               style: TextStyle(color: Theme.of(context).colorScheme.error),

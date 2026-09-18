@@ -2,7 +2,9 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/demo_mode.dart';
 import '../models/meal_item.dart';
+import 'local_meal_parser.dart';
 
 /// What the parser understood from one sentence.
 class ParseResult {
@@ -30,14 +32,19 @@ class MealParseException implements Exception {
   String toString() => message;
 }
 
+abstract class MealParserService {
+  Future<ParseResult> parse(String text, {MealSlot? slot});
+}
+
 /// Calls the `parseMeal` Cloud Function. The Gemini key lives server-side, so
 /// the app never holds it.
-class MealParserService {
-  MealParserService({FirebaseFunctions? functions})
+class RemoteMealParserService implements MealParserService {
+  RemoteMealParserService({FirebaseFunctions? functions})
       : _functions = functions ?? FirebaseFunctions.instance;
 
   final FirebaseFunctions _functions;
 
+  @override
   Future<ParseResult> parse(String text, {MealSlot? slot}) async {
     try {
       final callable = _functions.httpsCallable('parseMealCallable');
@@ -72,6 +79,22 @@ class MealParserService {
   }
 }
 
+/// Demo mode parses on-device, so the app needs no Gemini key to be shown.
+/// The small delay stands in for a network round trip, which keeps the
+/// loading states honest during a demo.
+class LocalMealParserService implements MealParserService {
+  @override
+  Future<ParseResult> parse(String text, {MealSlot? slot}) async {
+    await Future<void>.delayed(const Duration(milliseconds: 450));
+    final result = parseMealLocally(text);
+    return ParseResult(
+      items: result.items,
+      needsClarification: result.needsClarification,
+      question: result.question,
+    );
+  }
+}
+
 final mealParserProvider = Provider<MealParserService>(
-  (ref) => MealParserService(),
+  (ref) => kDemoMode ? LocalMealParserService() : RemoteMealParserService(),
 );

@@ -16,12 +16,12 @@ const _egg = MealItem(
 DayLog _log(String date, {bool checkedIn = true}) => DayLog(
       date: date,
       meals: [
-        LoggedMeal(
+        const LoggedMeal(
           mealId: 'breakfast',
           slot: MealSlot.breakfast,
           label: 'Usual breakfast',
           status: MealStatus.ate,
-          items: const [_egg],
+          items: [_egg],
         ),
       ],
       checkedInAt: checkedIn ? DateTime.parse('${date}T20:00:00Z') : null,

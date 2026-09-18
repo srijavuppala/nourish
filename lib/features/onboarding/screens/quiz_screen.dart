@@ -166,7 +166,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       );
 
   Widget _goalStep() => _question(
-        "What are you here for?",
+        'What are you here for?',
         'This sets your calorie and protein targets.',
         [
           for (final goal in Goal.values)

@@ -20,7 +20,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       _error = null;
     });
     try {
-      await ref.read(authRepositoryProvider).signInWithGoogle();
+      await ref.read(authRepositoryProvider).signIn();
       // On success the router redirects; no navigation needed here.
     } catch (_) {
       if (mounted) {

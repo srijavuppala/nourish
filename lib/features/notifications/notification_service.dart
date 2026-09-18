@@ -53,7 +53,13 @@ class NotificationService {
   /// Emits when a notification is tapped while the app is already running.
   static final ValueNotifier<String?> tapped = ValueNotifier<String?>(null);
 
+  /// The notifications plugin has no web implementation, so on web every
+  /// entry point below is a no-op and the app still runs. Reminders are a
+  /// phone feature; the web build exists to be demoed.
+  static bool get supported => !kIsWeb;
+
   Future<void> initialize() async {
+    if (!supported) return;
     tz_data.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation(await FlutterTimezone.getLocalTimezone()));
 
@@ -76,6 +82,7 @@ class NotificationService {
   }
 
   Future<bool> requestPermissions() async {
+    if (!supported) return false;
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     final androidGranted = await android?.requestNotificationsPermission();
@@ -91,6 +98,7 @@ class NotificationService {
     required Reminder morning,
     required Reminder evening,
   }) async {
+    if (!supported) return;
     await cancelAll();
 
     await _scheduleOne(
@@ -158,8 +166,10 @@ class NotificationService {
   }
 
   Future<void> cancelAll() async {
-    await _plugin.cancel(_morningId);
-    await _plugin.cancel(_eveningId);
+    if (supported) {
+      await _plugin.cancel(_morningId);
+      await _plugin.cancel(_eveningId);
+    }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_enabledKey, false);
   }
