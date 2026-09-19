@@ -106,6 +106,22 @@ void main() {
     expect(yesterday!.kcal, closeTo(planTotal, 0.01));
   });
 
+  test('a fully logged day lands near the targets, not wildly past them',
+      () async {
+    await seedDemoData();
+
+    final targets = (await DemoOnboardingRepository().watchTargets().first)!;
+    final meals = await DemoPlanRepository().loadMeals();
+    final planKcal = meals.fold<double>(0, (sum, meal) => sum + meal.kcal);
+    final planProtein =
+        meals.fold<double>(0, (sum, meal) => sum + meal.proteinG);
+
+    // Both rings should read as a believable day: roughly on target, never
+    // the 150%-of-goal that makes the sample targets look wrong.
+    expect(planKcal / targets.calories, inInclusiveRange(0.85, 1.15));
+    expect(planProtein / targets.proteinG, inInclusiveRange(0.85, 1.25));
+  });
+
   test('is deterministic, so a demo shows the same numbers every time', () async {
     await seedDemoData();
     final first = (await DemoPlanRepository().loadMeals())

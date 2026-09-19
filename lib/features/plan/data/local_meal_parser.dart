@@ -175,17 +175,31 @@ _Match? _matchFoodAt(List<String> tokens, int index) {
   return best;
 }
 
-/// The number immediately before a food word: "six eggs", "2 rotis".
+/// Unit words that can sit between the number and the food, as in
+/// "2 cups rice". Without this the quantity is lost and the amount silently
+/// falls back to one, which is worse than not parsing at all.
+const _spokenUnits = {
+  'cup', 'cups', 'slice', 'slices', 'scoop', 'scoops', 'piece', 'pieces',
+  'glass', 'glasses', 'bowl', 'bowls', 'tbsp', 'tsp', 'spoon', 'spoons',
+  'large', 'medium', 'small', 'plate', 'plates',
+};
+
+/// The number before a food word: "six eggs", "2 rotis", "2 cups rice".
 double? _quantityBefore(List<String> tokens, int index) {
-  if (index == 0) return null;
-  final previous = tokens[index - 1];
+  // Step back over at most one unit word, then look for the number.
+  for (var back = 1; back <= 2 && index - back >= 0; back++) {
+    final token = tokens[index - back];
 
-  final word = _numberWords[previous];
-  if (word != null) return word;
+    final word = _numberWords[token];
+    if (word != null) return word;
 
-  final digits = double.tryParse(previous);
-  if (digits != null && digits > 0 && digits < 1000) return digits;
+    final digits = double.tryParse(token);
+    if (digits != null && digits > 0 && digits < 1000) return digits;
 
+    // Only skip a token if it is a unit word; anything else ends the search
+    // so we do not reach back into a previous food's quantity.
+    if (!_spokenUnits.contains(token)) return null;
+  }
   return null;
 }
 

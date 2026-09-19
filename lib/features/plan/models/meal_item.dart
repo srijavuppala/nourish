@@ -64,6 +64,17 @@ class MealItem {
   /// `3 piece Roti` does.
   static const _silentUnits = {'piece', 'pieces', 'item', 'items', 'unit'};
 
+  /// Countable units read wrong in the singular at a quantity above one:
+  /// `2 cups Rice`, not `2 cup Rice`. Adjectives like `large` never change.
+  static const _countableUnits = {
+    'cup', 'slice', 'scoop', 'glass', 'bowl', 'plate', 'tbsp', 'tsp',
+  };
+
+  static String _pluralise(String unit, double qty) {
+    if (qty == 1 || !_countableUnits.contains(unit.toLowerCase())) return unit;
+    return unit.toLowerCase().endsWith('s') ? unit : '${unit}s';
+  }
+
   /// `6 large Egg`, `60g Oats`, `3 Roti` — what the cards and plan rows show.
   String get display {
     final quantity = qty == qty.roundToDouble()
@@ -77,7 +88,7 @@ class MealItem {
     if (_attachedUnits.contains(cleanUnit)) {
       return '$quantity$cleanUnit $name';
     }
-    return '$quantity ${unit.trim()} $name';
+    return '$quantity ${_pluralise(unit.trim(), qty)} $name';
   }
 
   Map<String, dynamic> toMap() => {

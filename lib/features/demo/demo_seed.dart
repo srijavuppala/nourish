@@ -16,12 +16,15 @@ import '../plan/models/plan_meal.dart';
 /// Everything is deterministic: the same demo produces the same numbers every
 /// time, which matters when you are presenting it.
 
+/// A gym-goer tracking protein — the persona the check-in is built for.
+/// The goal and weight are chosen so the sample plan lands near the targets
+/// it produces; a demo where the plan is 150% of target looks broken.
 const _demoProfile = Profile(
-  goal: Goal.maintain,
+  goal: Goal.buildMuscle,
   sex: Sex.male,
   age: 28,
-  heightCm: 175,
-  weightKg: 72,
+  heightCm: 178,
+  weightKg: 82,
   activityLevel: ActivityLevel.moderate,
   mealsPerDay: 4,
   gymTime: '07:00',
@@ -34,7 +37,7 @@ const _demoProfile = Profile(
 const _demoMeals = <(MealSlot, String, String)>[
   (MealSlot.breakfast, 'Usual breakfast', 'six eggs and two bananas and 60g oats'),
   (MealSlot.lunch, 'Usual lunch', '3 rotis with dal and 100g paneer'),
-  (MealSlot.dinner, 'Usual dinner', '150g chicken breast and rice'),
+  (MealSlot.dinner, 'Usual dinner', '200g chicken breast and 2 cups rice'),
   (MealSlot.snack, 'After the gym', 'a protein shake and 30g almonds'),
 ];
 

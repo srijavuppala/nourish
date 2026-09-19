@@ -43,10 +43,10 @@ Firebase.
 | Analyzer | Clean — `No issues found!` |
 | Dart unit tests | 39 passing |
 | Cloud Function tests | 45 passing |
-| Demo mode on web | Verified in Chromium: sign-in, quiz, chat parsing, saving meals |
+| Demo mode on web | Verified in Chromium end to end: sign-in, quiz, chat parsing, check-in deck, save, History |
+| Deploy config | Vercel and Firebase Hosting both build the demo app |
 | Firestore security rules | Written, not yet run against the emulator |
 | Firebase project wiring | Not done — needs `flutterfire configure` |
-| Check-in deck on a real device | Not yet exercised end to end |
 | Android signing and APK | Not done |
 
 ## Getting it running against Firebase
@@ -160,18 +160,34 @@ intact so the Vercel deploy keeps working — `vercel.json` still points at it.
 It is a separate app: single-blob storage keyed by a browser cookie, no user
 accounts. None of it carries into the mobile app, but it is there for demos.
 
+## Deploying the demo
+
+`vercel.json` and `firebase.json` both build the demo-mode web app, so either
+host works with no extra setup:
+
+```bash
+# Vercel: connect the repo, or
+npx vercel --prod
+
+# Firebase Hosting
+bash scripts/build-web-demo.sh
+firebase deploy --only hosting
+```
+
+`scripts/build-web-demo.sh` fetches the pinned Flutter SDK if the build
+machine has none, so CI needs nothing installed.
+
 ## Known gaps
 
 - Typing a second meal before confirming the first silently replaces the
   pending card. Fine when you are correcting yourself, confusing otherwise.
-- The check-in swipe deck has not been driven end to end yet; the flow above
-  stops after meals are saved to the plan.
 - Notifications are a no-op on web. They are a phone feature, and the web
   build exists to be demoed.
+- The on-device demo parser knows about 25 foods. Anything else asks a
+  clarifying question. The real Gemini parser has no such limit.
 
 ## Next
 
-- Drive the check-in deck and History calendar in the browser
 - Test the Firestore rules in the emulator
-- Widget tests for the check-in deck
 - Android signing config and a first APK, once there is an Android tester
+- Widget tests for the chat and onboarding screens

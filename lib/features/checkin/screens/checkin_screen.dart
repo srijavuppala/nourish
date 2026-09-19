@@ -181,7 +181,16 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
               } else if (previous == meals.length) {
                 _workout = ate;
               }
-              if (current == null) setState(() => _finished = true);
+              if (current == null) {
+                // The swiper runs its own reset after this callback returns.
+                // Tearing it out of the tree here disposes its
+                // AnimationController mid-reset and throws — which Crashlytics
+                // would record as a crash on every completed check-in. Swap to
+                // the summary on the next frame, once that reset has run.
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) setState(() => _finished = true);
+                });
+              }
               return true;
             },
             cardBuilder: (context, index, _, __) => cards[index],
@@ -249,7 +258,19 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 20),
+          const Divider(height: 1),
+          const SizedBox(height: 8),
+          // Not obvious otherwise that a card can be adjusted rather than
+          // answered yes or no.
+          Text(
+            'Had a different amount? Adjust it here.',
+            style: TextStyle(
+              fontSize: 13,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 4),
           // The "only 3 eggs" case: adjust without leaving the card.
           for (var index = 0; index < items.length; index++)
             _StepperRow(
@@ -260,10 +281,13 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
                 _adjusted[meal.id] = next;
               }),
             ),
-          const SizedBox(height: 12),
+          // Remaining space sits below the content, not in the middle of it.
+          const Spacer(),
+          const Divider(height: 1),
+          const SizedBox(height: 10),
           Text(
             '${kcal.round()} kcal · ${protein.round()}g protein',
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
         ],
       ),

@@ -76,6 +76,22 @@ void main() {
       );
     });
 
+    test('pluralises a countable unit above one', () {
+      const rice = MealItem(
+        name: 'Rice',
+        qty: 2,
+        unit: 'cup',
+        kcal: 412,
+        proteinG: 8.6,
+      );
+      expect(rice.display, '2 cups Rice');
+      expect(rice.withQty(1).display, '1 cup Rice');
+    });
+
+    test('never pluralises an adjective unit', () {
+      expect(_egg.display, '6 large Egg');
+    });
+
     test('drops units that add nothing to the name', () {
       expect(
         const MealItem(name: 'Roti', qty: 3, unit: 'piece', kcal: 360, proteinG: 9)

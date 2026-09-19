@@ -56,6 +56,26 @@ void main() {
       expect(result.items.length, 1);
     });
 
+    test('keeps the quantity when a unit word sits before the food', () {
+      expect(parseMealLocally('2 cups rice').items.single.qty, 2);
+      expect(parseMealLocally('3 slices bread').items.single.qty, 3);
+      expect(parseMealLocally('2 scoops protein shake').items.single.qty, 2);
+      expect(parseMealLocally('two glasses milk').items.single.qty, 2);
+    });
+
+    test('scales nutrition for a unit-word quantity', () {
+      final one = parseMealLocally('1 cup rice').items.single;
+      final two = parseMealLocally('2 cups rice').items.single;
+      expect(two.kcal, closeTo(one.kcal * 2, 0.01));
+    });
+
+    test('does not borrow a quantity from the previous food', () {
+      // "6 eggs and rice" must not read rice as 6 cups.
+      final result = parseMealLocally('6 eggs and rice');
+      expect(result.items.firstWhere((i) => i.name == 'Egg').qty, 6);
+      expect(result.items.firstWhere((i) => i.name == 'Rice').qty, 1);
+    });
+
     test('asks a question when it recognises nothing', () {
       final result = parseMealLocally('the usual thing');
       expect(result.items, isEmpty);
