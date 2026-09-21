@@ -199,7 +199,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       mealTimes: profile?.mealTimes ?? const [],
     );
 
-    final service = NotificationService();
+    final service = ref.read(notificationServiceProvider);
     if (await service.requestPermissions()) {
       await service.scheduleDaily(
         morning: suggested.morning,

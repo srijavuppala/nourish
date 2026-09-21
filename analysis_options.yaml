@@ -5,6 +5,8 @@ analyzer:
     # The earlier web prototype keeps its own (much denser) style.
     - legacy/**
     - build/**
+    # firebase-tools ships Dart templates inside node_modules.
+    - functions/**
     - web/**
 
 linter:

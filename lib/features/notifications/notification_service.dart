@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
@@ -203,3 +204,9 @@ class NotificationService {
   static Reminder _addHour(Reminder reminder) =>
       Reminder((reminder.hour + 1) % 24, reminder.minute);
 }
+
+/// Injected so widget tests can supply a fake instead of reaching for a
+/// platform plugin that does not exist under `flutter test`.
+final notificationServiceProvider = Provider<NotificationService>(
+  (ref) => NotificationService(),
+);

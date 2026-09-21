@@ -41,11 +41,11 @@ Firebase.
 | Area | State |
 | --- | --- |
 | Analyzer | Clean — `No issues found!` |
-| Dart unit tests | 39 passing |
+| Dart tests | 85 passing (units, plus widget tests for the quiz, chat and check-in) |
 | Cloud Function tests | 45 passing |
+| Firestore rules | 64 tests passing against the emulator |
 | Demo mode on web | Verified in Chromium end to end: sign-in, quiz, chat parsing, check-in deck, save, History |
 | Deploy config | Vercel and Firebase Hosting both build the demo app |
-| Firestore security rules | 64 tests passing against the Firestore emulator |
 | Firebase project wiring | Not done — needs `flutterfire configure` |
 | Android signing and APK | Not done |
 
@@ -190,5 +190,6 @@ machine has none, so CI needs nothing installed.
 
 ## Next
 
-- Widget tests for the chat and onboarding screens
 - Android signing config and a first APK, once there is an Android tester
+- Deploy the demo somewhere for a shareable link
+- Swap the demo parser for Gemini once a Firebase project exists

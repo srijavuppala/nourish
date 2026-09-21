@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  final _service = NotificationService();
+  NotificationService get _service => ref.read(notificationServiceProvider);
 
   Reminder _morning = defaultMorning;
   Reminder _evening = defaultEvening;
