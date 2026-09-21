@@ -8,13 +8,18 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "node --test test/*.test.js",
+    "test": "node --test test/validate.test.js test/parseMeal.test.js test/usda.test.js test/gemini.test.js",
     "serve": "firebase emulators:start --only functions",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-nourish \"node --test test/firestore-rules.test.js\""
   },
   "dependencies": {
     "firebase-admin": "^12.6.0",
     "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase-tools": "^15.30.2"
   }
 }

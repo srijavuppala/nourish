@@ -45,7 +45,7 @@ Firebase.
 | Cloud Function tests | 45 passing |
 | Demo mode on web | Verified in Chromium end to end: sign-in, quiz, chat parsing, check-in deck, save, History |
 | Deploy config | Vercel and Firebase Hosting both build the demo app |
-| Firestore security rules | Written, not yet run against the emulator |
+| Firestore security rules | 64 tests passing against the Firestore emulator |
 | Firebase project wiring | Not done — needs `flutterfire configure` |
 | Android signing and APK | Not done |
 
@@ -65,7 +65,9 @@ flutter analyze          # fix what this reports first
 flutter test
 
 # 4. Cloud Functions
-cd functions && npm install && npm test
+cd functions && npm install
+npm test           # parser unit tests
+npm run test:rules # security rules, against the Firestore emulator (needs Java)
 ```
 
 In the Firebase console you also need to:
@@ -188,6 +190,5 @@ machine has none, so CI needs nothing installed.
 
 ## Next
 
-- Test the Firestore rules in the emulator
-- Android signing config and a first APK, once there is an Android tester
 - Widget tests for the chat and onboarding screens
+- Android signing config and a first APK, once there is an Android tester
